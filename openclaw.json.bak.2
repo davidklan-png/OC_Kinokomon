@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.13",
+    "lastTouchedAt": "2026-02-15T02:38:29.376Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-15T00:07:03.736Z",
+    "lastRunVersion": "2026.2.13",
+    "lastRunCommand": "configure",
+    "lastRunMode": "local"
+  },
+  "agents": {
+    "defaults": {
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "enabled": true
+      },
+      "fetch": {
+        "enabled": false
+      }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto"
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "token": "dev-token"
+    }
+  }
+}

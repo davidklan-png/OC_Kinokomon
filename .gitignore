@@ -1,0 +1,17 @@
+# Ignore sensitive files
+.env
+*.bak
+*.jsonl
+*.cmd
+*.ps1
+*.fish
+*.zsh
+*.bash
+workspace/
+logs/
+identity/
+openclaw.json
+update-check.json
+agents/main/agent/auth-profiles.json
+agents/main/agent/models.json
+agents/main/sessions/1eab923d-2c68-4f50-89c6-f970dd1b3532.jsonl
