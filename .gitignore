@@ -14,4 +14,9 @@ openclaw.json
 update-check.json
 agents/main/agent/auth-profiles.json
 agents/main/agent/models.json
-agents/main/sessions/1eab923d-2c68-4f50-89c6-f970dd1b3532.jsonl
+agents/main/sessions/*.jsonl
+agents/main/sessions/*.jsonl.deleted.*
+agents/main/sessions/*.jsonl.lock
+credentials/
+devices/
+subagents/
