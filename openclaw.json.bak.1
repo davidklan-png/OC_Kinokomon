@@ -1,12 +1,12 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.2.13",
-    "lastTouchedAt": "2026-02-15T03:16:44.058Z"
+    "lastTouchedAt": "2026-02-16T01:27:14.232Z"
   },
   "wizard": {
-    "lastRunAt": "2026-02-15T00:07:03.736Z",
+    "lastRunAt": "2026-02-15T03:16:55.860Z",
     "lastRunVersion": "2026.2.13",
-    "lastRunCommand": "configure",
+    "lastRunCommand": "onboard",
     "lastRunMode": "local"
   },
   "auth": {
@@ -120,6 +120,10 @@
       "fetch": {
         "enabled": false
       }
+    },
+    "agentToAgent": {
+      "enabled": true,
+      "allow": []
     }
   },
   "messages": {
@@ -128,6 +132,30 @@
   "commands": {
     "native": "auto",
     "nativeSkills": "auto"
+  },
+  "channels": {
+    "whatsapp": {
+      "dmPolicy": "allowlist",
+      "selfChatMode": true,
+      "allowFrom": [
+        "+819082669210"
+      ],
+      "groupAllowFrom": [
+        "+819082669210"
+      ],
+      "groupPolicy": "allowlist",
+      "textChunkLimit": 4000,
+      "mediaMaxMb": 50,
+      "debounceMs": 0
+    },
+    "slack": {
+      "mode": "socket",
+      "webhookPath": "/slack/events",
+      "userTokenReadOnly": true,
+      "groupPolicy": "allowlist",
+      "channels": {},
+      "accounts": {}
+    }
   },
   "gateway": {
     "port": 18789,
@@ -146,6 +174,21 @@
     "entries": {
       "slack": {
         "enabled": true
+      },
+      "whatsapp": {
+        "enabled": true
+      },
+      "line": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "line": {
+        "source": "path",
+        "sourcePath": "/usr/lib/node_modules/openclaw/extensions/line",
+        "installPath": "/home/teabagger/.openclaw/extensions/line",
+        "version": "2026.2.13",
+        "installedAt": "2026-02-16T01:27:14.085Z"
       }
     }
   }
