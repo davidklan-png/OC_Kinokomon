@@ -1,4 +1,37 @@
 {
   "version": 1,
-  "jobs": []
+  "jobs": [
+    {
+      "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
+      "agentId": "main",
+      "name": "Moltbook Ghost Hunter",
+      "enabled": true,
+      "createdAtMs": 1771358791222,
+      "updatedAtMs": 1771413720151,
+      "schedule": {
+        "kind": "every",
+        "everyMs": 14400000,
+        "anchorMs": 1740000000
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run Moltbook Ghost Hunter. Execute: /home/teabagger/.openclaw/workspace/node moltbook-ghost-hunter.js",
+        "model": "zai/glm-4.7",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1771428000000,
+        "lastRunAtMs": 1771413600030,
+        "lastStatus": "error",
+        "lastDurationMs": 120121,
+        "consecutiveErrors": 4,
+        "lastError": "Error: cron: job execution timed out"
+      }
+    }
+  ]
 }
