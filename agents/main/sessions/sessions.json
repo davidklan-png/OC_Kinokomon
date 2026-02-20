@@ -1,7 +1,7 @@
 {
   "agent:main:main": {
     "sessionId": "c5d05e74-29b7-4b52-af43-ba1b8f9f6e2d",
-    "updatedAt": 1771547686845,
+    "updatedAt": 1771550752956,
     "systemSent": true,
     "abortedLastRun": false,
     "chatType": "direct",
@@ -12,7 +12,7 @@
     "lastTo": "heartbeat",
     "origin": {
       "label": "heartbeat",
-      "provider": "webchat",
+      "provider": "heartbeat",
       "from": "heartbeat",
       "to": "heartbeat",
       "surface": "webchat",
@@ -108,16 +108,16 @@
     "authProfileOverride": "zai:default",
     "authProfileOverrideSource": "auto",
     "authProfileOverrideCompactionCount": 0,
-    "inputTokens": 118265,
-    "outputTokens": 843,
-    "totalTokens": 123467,
+    "inputTokens": 106803,
+    "outputTokens": 733,
+    "totalTokens": 128758,
     "totalTokensFresh": true,
     "modelProvider": "zai",
     "model": "glm-4.7",
     "contextTokens": 204800,
     "systemPromptReport": {
       "source": "run",
-      "generatedAt": 1771547663938,
+      "generatedAt": 1771550652144,
       "sessionId": "c5d05e74-29b7-4b52-af43-ba1b8f9f6e2d",
       "sessionKey": "agent:main:main",
       "provider": "zai",
@@ -129,9 +129,9 @@
         "sandboxed": false
       },
       "systemPrompt": {
-        "chars": 46509,
+        "chars": 46495,
         "projectContextChars": 34867,
-        "nonProjectContextChars": 11642
+        "nonProjectContextChars": 11628
       },
       "injectedWorkspaceFiles": [
         {
