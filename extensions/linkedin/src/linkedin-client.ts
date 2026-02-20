@@ -15,7 +15,7 @@ export interface PostResult {
 
 async function getAuth(): Promise<{
   token: string;
-  personUrn: string;
+  personUrn?: string; // Made optional since we can't always fetch it
   warning?: string;
 } | null> {
   return getValidToken();
@@ -44,8 +44,9 @@ export async function postText(
     };
   }
 
-  const body = {
-    author: auth.personUrn,
+  // Build body - only include author field if we have a valid person URN
+  // LinkedIn will infer the author from the authenticated token if omitted
+  const body: Record<string, unknown> = {
     lifecycleState: "PUBLISHED",
     specificContent: {
       "com.linkedin.ugc.ShareContent": {
@@ -57,6 +58,11 @@ export async function postText(
       "com.linkedin.ugc.MemberNetworkVisibility": visibility,
     },
   };
+
+  // Only add author field if we have it and it's not a placeholder
+  if (auth.personUrn && !auth.personUrn.startsWith('unknown')) {
+    body.author = auth.personUrn;
+  }
 
   const res = await fetch(UGC_POSTS_URL, {
     method: "POST",
@@ -98,8 +104,8 @@ export async function postArticle(
   if (title) media.title = { text: title };
   if (description) media.description = { text: description };
 
-  const body = {
-    author: auth.personUrn,
+  // Build body - only include author if we have it
+  const body: Record<string, unknown> = {
     lifecycleState: "PUBLISHED",
     specificContent: {
       "com.linkedin.ugc.ShareContent": {
@@ -112,6 +118,10 @@ export async function postArticle(
       "com.linkedin.ugc.MemberNetworkVisibility": visibility,
     },
   };
+
+  if (auth.personUrn && !auth.personUrn.startsWith('unknown')) {
+    body.author = auth.personUrn;
+  }
 
   const res = await fetch(UGC_POSTS_URL, {
     method: "POST",
@@ -129,14 +139,11 @@ export async function postArticle(
 }
 
 /**
- * Share an image on LinkedIn with text commentary.
- * Three-step process: register upload, upload binary, create post.
+ * Post an image with optional caption to LinkedIn.
  */
 export async function postImage(
   text: string,
   imagePath: string,
-  title?: string,
-  description?: string,
   visibility: Visibility = "PUBLIC",
 ): Promise<PostResult> {
   const auth = await getAuth();
@@ -147,80 +154,39 @@ export async function postImage(
     };
   }
 
-  // Step 1: Register upload
-  const registerBody = {
-    registerUploadRequest: {
-      recipes: ["urn:li:digitalmediaRecipe:feedshare-image"],
-      owner: auth.personUrn,
-      serviceRelationships: [
-        {
-          relationshipType: "OWNER",
-          identifier: "urn:li:userGeneratedContent",
-        },
-      ],
-    },
-  };
-
-  const registerRes = await fetch(ASSETS_URL, {
-    method: "POST",
-    headers: linkedInHeaders(auth.token),
-    body: JSON.stringify(registerBody),
-  });
-
-  if (!registerRes.ok) {
-    const errBody = await registerRes.text();
-    return { success: false, error: `Image register failed (${registerRes.status}): ${errBody}` };
-  }
-
-  const registerData = (await registerRes.json()) as {
-    value: {
-      uploadMechanism: {
-        "com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest": {
-          uploadUrl: string;
-        };
-      };
-      asset: string;
-    };
-  };
-
-  const uploadUrl =
-    registerData.value.uploadMechanism[
-      "com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"
-    ].uploadUrl;
-  const assetUrn = registerData.value.asset;
-
-  // Step 2: Upload the image binary
+  // Read image
   const imageBuffer = await readFile(imagePath);
-  const uploadRes = await fetch(uploadUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${auth.token}`,
-      "Content-Type": "application/octet-stream",
-    },
-    body: imageBuffer,
-  });
+  const imageBase64 = imageBuffer.toString("base64");
 
-  if (!uploadRes.ok) {
-    const errBody = await uploadRes.text();
-    return { success: false, error: `Image upload failed (${uploadRes.status}): ${errBody}` };
-  }
-
-  // Step 3: Create the image share
-  const imageMedia: Record<string, unknown> = {
-    status: "READY",
-    media: assetUrn,
-  };
-  if (title) imageMedia.title = { text: title };
-  if (description) imageMedia.description = { text: description };
-
-  const body = {
-    author: auth.personUrn,
+  // Build body
+  const body: Record<string, unknown> = {
     lifecycleState: "PUBLISHED",
     specificContent: {
       "com.linkedin.ugc.ShareContent": {
         shareCommentary: { text },
         shareMediaCategory: "IMAGE",
-        media: [imageMedia],
+        media: [
+          {
+            "description": {
+              "text": text,
+            },
+            "mediaType": "staticimage",
+            "status": "READY",
+          },
+          {
+            "description": {
+              "altText": "image",
+            },
+            "mediaType": "staticimage:alttext",
+            "binaryContent": imageBase64,
+            "fileFormat": "JPEG",
+            "dimensions": {
+              "height": 1080,
+              "width": 1920,
+            },
+            "status": "READY",
+          },
+        ],
       },
     },
     visibility: {
@@ -228,17 +194,43 @@ export async function postImage(
     },
   };
 
-  const res = await fetch(UGC_POSTS_URL, {
-    method: "POST",
-    headers: linkedInHeaders(auth.token),
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const errBody = await res.text();
-    return { success: false, error: `LinkedIn API error (${res.status}): ${errBody}` };
+  // Only include author if we have it
+  if (auth.personUrn && !auth.personUrn.startsWith('unknown')) {
+    body.author = auth.personUrn;
   }
 
-  const postId = res.headers.get("X-RestLi-Id") ?? undefined;
+  // First, register the image upload
+  const registerRes = await fetch(ASSETS_URL, {
+    method: "POST",
+    headers: linkedInHeaders(auth.token),
+    body: JSON.stringify({ registerUploadRequest: { ...media, ...media[0] } }),
+  });
+
+  if (!registerRes.ok) {
+    const errBody = await registerRes.text();
+    return { success: false, error: `LinkedIn API error (${registerRes.status}): ${errBody}` };
+  }
+
+  const asset = await registerRes.json();
+
+  // Second, create the UGC post
+  const postRes = await fetch(UGC_POSTS_URL, {
+    method: "POST",
+    headers: linkedInHeaders(auth.token),
+    body: JSON.stringify({
+      ...body,
+      specificContent: {
+        ...body.specificContent,
+        media: [asset.value],
+      },
+    }),
+  });
+
+  if (!postRes.ok) {
+    const errBody = await postRes.text();
+    return { success: false, error: `LinkedIn API error (${postRes.status}): ${errBody}` };
+  }
+
+  const postId = postRes.headers.get("X-RestLi-Id") ?? undefined;
   return { success: true, postId, warning: auth.warning };
 }

@@ -1,7 +1,7 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.2.13",
-    "lastTouchedAt": "2026-02-16T01:27:37.353Z"
+    "lastTouchedAt": "2026-02-16T01:28:33.221Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-15T03:16:55.860Z",
@@ -89,6 +89,44 @@
             "maxTokens": 131072
           }
         ]
+      },
+      "anthropic": {
+        "baseUrl": "https://api.anthropic.com",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "claude-opus-4-20250514",
+            "name": "Claude Opus 4.6",
+            "reasoning": true,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 15,
+              "output": 75,
+              "cacheRead": 0.3,
+              "cacheWrite": 3.75
+            },
+            "contextWindow": 200000,
+            "maxTokens": 4096
+          },
+          {
+            "id": "claude-sonnet-4-20250514",
+            "name": "Claude Sonnet 4.6",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 3,
+              "output": 15,
+              "cacheRead": 0.3,
+              "cacheWrite": 3.75
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
       }
     }
   },
@@ -98,8 +136,17 @@
         "primary": "zai/glm-4.7"
       },
       "models": {
+        "zai/glm-5": {
+          "alias": "GLM-5"
+        },
         "zai/glm-4.7": {
           "alias": "GLM"
+        },
+        "anthropic/claude-opus-4-20250514": {
+          "alias": "Opus"
+        },
+        "anthropic/claude-sonnet-4-20250514": {
+          "alias": "Sonnet"
         }
       },
       "workspace": "/home/teabagger/.openclaw/workspace",
@@ -163,7 +210,8 @@
       "dmPolicy": "allowlist",
       "allowFrom": [
         "U806bc4f730d471e2aa87266244c9facf"
-      ]
+      ],
+      "webhookPath": "/line/webhook"
     }
   },
   "gateway": {

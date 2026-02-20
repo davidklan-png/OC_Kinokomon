@@ -5,9 +5,9 @@
       "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
       "agentId": "main",
       "name": "Moltbook Ghost Hunter",
-      "enabled": true,
+      "enabled": false,
       "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771543297985,
+      "updatedAtMs": 1771586525672,
       "schedule": {
         "kind": "every",
         "everyMs": 14400000,
@@ -25,11 +25,33 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1771557600000,
-        "lastRunAtMs": 1771543200187,
-        "lastStatus": "ok",
-        "lastDurationMs": 97798,
-        "consecutiveErrors": 0
+        "lastRunAtMs": 1771586401903,
+        "lastStatus": "error",
+        "lastDurationMs": 123769,
+        "consecutiveErrors": 2,
+        "lastError": "Error: cron: job execution timed out"
+      }
+    },
+    {
+      "id": "b662bf2a-e7ed-4b32-9e89-2a5dd404eca9",
+      "agentId": "main",
+      "name": "Re-enable Ghost Hunter after suspension",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771586468945,
+      "updatedAtMs": 1771586468945,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-21T11:25:00.000Z"
+      },
+      "sessionTarget": "main",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "systemEvent",
+        "text": "🔓 Reminder: Moltbook Ghost Hunter suspension should be lifted. Re-enable cron job 990bbe20-b1a5-46e9-ad7e-4020b7ed53ae and test the improved verification handler in dry-run mode first."
+      },
+      "state": {
+        "nextRunAtMs": 1771673100000
       }
     }
   ]
