@@ -7,7 +7,7 @@
       "name": "Moltbook Ghost Hunter",
       "enabled": true,
       "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771413720151,
+      "updatedAtMs": 1771543297985,
       "schedule": {
         "kind": "every",
         "everyMs": 14400000,
@@ -25,12 +25,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1771428000000,
-        "lastRunAtMs": 1771413600030,
-        "lastStatus": "error",
-        "lastDurationMs": 120121,
-        "consecutiveErrors": 4,
-        "lastError": "Error: cron: job execution timed out"
+        "nextRunAtMs": 1771557600000,
+        "lastRunAtMs": 1771543200187,
+        "lastStatus": "ok",
+        "lastDurationMs": 97798,
+        "consecutiveErrors": 0
       }
     }
   ]
