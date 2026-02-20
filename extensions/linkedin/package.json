@@ -1,0 +1,19 @@
+{
+  "name": "@openclaw/linkedin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OpenClaw LinkedIn content posting tool",
+  "type": "module",
+  "devDependencies": {
+    "openclaw": "workspace:*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "localPath": "extensions/linkedin",
+      "defaultChoice": "path"
+    }
+  }
+}
