@@ -1,0 +1,21 @@
+{
+  "id": "linkedin",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "clientId": { "type": "string" },
+      "clientSecret": { "type": "string" },
+      "redirectUri": {
+        "type": "string",
+        "default": "https://kinokoholic.com/linkedin/callback"
+      }
+    },
+    "required": ["clientId", "clientSecret"]
+  },
+  "uiHints": {
+    "clientId": { "label": "LinkedIn Client ID" },
+    "clientSecret": { "label": "LinkedIn Client Secret", "sensitive": true },
+    "redirectUri": { "label": "OAuth Redirect URI" }
+  }
+}
