@@ -7,7 +7,7 @@ import {
 
 const LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 const LINKEDIN_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
-const LINKEDIN_PROFILE_URL = "https://api.linkedin.com/v2/me";
+const LINKEDIN_PROFILE_URL = "https://api.linkedin.com/v2/userinfo";
 const SCOPES = "openid profile w_member_social";
 
 export interface LinkedInOAuthConfig {
@@ -84,8 +84,8 @@ export async function handleOAuthCallback(
     return { success: false, error: `Profile fetch failed (${profileResponse.status}): ${errBody}` };
   }
 
-  const profileData = (await profileResponse.json()) as { id: string };
-  const personUrn = `urn:li:person:${profileData.id}`;
+  const profileData = (await profileResponse.json()) as { sub: string };
+  const personUrn = `urn:li:person:${profileData.sub}`;
 
   const now = Date.now();
   await saveTokens({
