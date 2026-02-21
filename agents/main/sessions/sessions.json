@@ -1,7 +1,7 @@
 {
   "agent:main:main": {
     "sessionId": "5cc2ec25-78c0-4389-a325-b58f640f8fd8",
-    "updatedAt": 1771622866805,
+    "updatedAt": 1771670534546,
     "systemSent": true,
     "abortedLastRun": false,
     "chatType": "direct",
@@ -110,16 +110,16 @@
     "authProfileOverride": "zai:default",
     "authProfileOverrideSource": "auto",
     "authProfileOverrideCompactionCount": 0,
-    "inputTokens": 14293,
-    "outputTokens": 635,
-    "totalTokens": 61034,
+    "inputTokens": 123940,
+    "outputTokens": 123,
+    "totalTokens": 130079,
     "totalTokensFresh": true,
     "modelProvider": "zai",
     "model": "glm-4.7",
     "contextTokens": 204800,
     "systemPromptReport": {
       "source": "run",
-      "generatedAt": 1771622858255,
+      "generatedAt": 1771670515302,
       "sessionId": "5cc2ec25-78c0-4389-a325-b58f640f8fd8",
       "sessionKey": "agent:main:main",
       "provider": "zai",
@@ -131,8 +131,8 @@
         "sandboxed": false
       },
       "systemPrompt": {
-        "chars": 48709,
-        "projectContextChars": 37081,
+        "chars": 34808,
+        "projectContextChars": 23180,
         "nonProjectContextChars": 11628
       },
       "injectedWorkspaceFiles": [
@@ -180,8 +180,8 @@
           "name": "HEARTBEAT.md",
           "path": "/home/teabagger/.openclaw/workspace/HEARTBEAT.md",
           "missing": false,
-          "rawChars": 16580,
-          "injectedChars": 16580,
+          "rawChars": 2679,
+          "injectedChars": 2679,
           "truncated": false
         },
         {
@@ -493,300 +493,6 @@
     "inputTokens": 17085,
     "outputTokens": 6298,
     "totalTokens": 27882,
-    "totalTokensFresh": true
-  },
-  "agent:main:cron:990bbe20-b1a5-46e9-ad7e-4020b7ed53ae:run:bec64ae0-7470-457c-bb0c-5cf02af06f23": {
-    "sessionId": "bec64ae0-7470-457c-bb0c-5cf02af06f23",
-    "updatedAt": 1771543200200,
-    "systemSent": true,
-    "model": "glm-4.7",
-    "contextTokens": 204800,
-    "label": "Cron: Moltbook Ghost Hunter",
-    "skillsSnapshot": {
-      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>tmux</name>\n    <description>Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n</available_skills>",
-      "skills": [
-        {
-          "name": "coding-agent"
-        },
-        {
-          "name": "github"
-        },
-        {
-          "name": "healthcheck"
-        },
-        {
-          "name": "skill-creator"
-        },
-        {
-          "name": "slack"
-        },
-        {
-          "name": "tmux"
-        },
-        {
-          "name": "weather"
-        }
-      ],
-      "resolvedSkills": [
-        {
-          "name": "coding-agent",
-          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/coding-agent",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "github",
-          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/github/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/github",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "healthcheck",
-          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/healthcheck",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "skill-creator",
-          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/skill-creator",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "slack",
-          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/slack/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/slack",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "tmux",
-          "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/tmux",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "weather",
-          "description": "Get current weather and forecasts (no API key required).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/weather/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/weather",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        }
-      ],
-      "version": 0
-    },
-    "modelProvider": "zai",
-    "inputTokens": 32879,
-    "outputTokens": 7988,
-    "totalTokens": 44938,
-    "totalTokensFresh": true
-  },
-  "agent:main:cron:990bbe20-b1a5-46e9-ad7e-4020b7ed53ae:run:74da710d-3d56-4a37-9bc4-6d0c5fc7e8ac": {
-    "sessionId": "74da710d-3d56-4a37-9bc4-6d0c5fc7e8ac",
-    "updatedAt": 1771557600033,
-    "systemSent": true,
-    "model": "glm-4.7",
-    "contextTokens": 204800,
-    "label": "Cron: Moltbook Ghost Hunter",
-    "skillsSnapshot": {
-      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>tmux</name>\n    <description>Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n</available_skills>",
-      "skills": [
-        {
-          "name": "coding-agent"
-        },
-        {
-          "name": "github"
-        },
-        {
-          "name": "healthcheck"
-        },
-        {
-          "name": "skill-creator"
-        },
-        {
-          "name": "slack"
-        },
-        {
-          "name": "tmux"
-        },
-        {
-          "name": "weather"
-        }
-      ],
-      "resolvedSkills": [
-        {
-          "name": "coding-agent",
-          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/coding-agent",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "github",
-          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/github/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/github",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "healthcheck",
-          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/healthcheck",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "skill-creator",
-          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/skill-creator",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "slack",
-          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/slack/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/slack",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "tmux",
-          "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/tmux",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "weather",
-          "description": "Get current weather and forecasts (no API key required).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/weather/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/weather",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        }
-      ],
-      "version": 0
-    },
-    "modelProvider": "zai",
-    "inputTokens": 15084,
-    "outputTokens": 1065,
-    "totalTokens": 19053,
-    "totalTokensFresh": true
-  },
-  "agent:main:cron:990bbe20-b1a5-46e9-ad7e-4020b7ed53ae:run:93135047-e80a-4dd3-81d8-ebb900b9e8e5": {
-    "sessionId": "93135047-e80a-4dd3-81d8-ebb900b9e8e5",
-    "updatedAt": 1771572000034,
-    "systemSent": true,
-    "model": "glm-4.7",
-    "contextTokens": 204800,
-    "label": "Cron: Moltbook Ghost Hunter",
-    "skillsSnapshot": {
-      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>tmux</name>\n    <description>Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.</description>\n    <location>/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/usr/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n</available_skills>",
-      "skills": [
-        {
-          "name": "coding-agent"
-        },
-        {
-          "name": "github"
-        },
-        {
-          "name": "healthcheck"
-        },
-        {
-          "name": "skill-creator"
-        },
-        {
-          "name": "slack"
-        },
-        {
-          "name": "tmux"
-        },
-        {
-          "name": "weather"
-        }
-      ],
-      "resolvedSkills": [
-        {
-          "name": "coding-agent",
-          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/coding-agent",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "github",
-          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/github/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/github",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "healthcheck",
-          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/healthcheck",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "skill-creator",
-          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/skill-creator",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "slack",
-          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/slack/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/slack",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "tmux",
-          "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/tmux/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/tmux",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        },
-        {
-          "name": "weather",
-          "description": "Get current weather and forecasts (no API key required).",
-          "filePath": "/usr/lib/node_modules/openclaw/skills/weather/SKILL.md",
-          "baseDir": "/usr/lib/node_modules/openclaw/skills/weather",
-          "source": "openclaw-bundled",
-          "disableModelInvocation": false
-        }
-      ],
-      "version": 0
-    },
-    "modelProvider": "zai",
-    "inputTokens": 14033,
-    "outputTokens": 1349,
-    "totalTokens": 21042,
     "totalTokensFresh": true
   },
   "agent:main:cron:990bbe20-b1a5-46e9-ad7e-4020b7ed53ae:run:44a43ec8-10b3-4ce7-8a91-d19ca6086599": {
