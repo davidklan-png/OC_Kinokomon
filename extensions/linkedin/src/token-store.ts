@@ -52,16 +52,3 @@ export async function getValidToken(): Promise<{
 
   return result;
 }
-
-/** Temporary CSRF state storage for OAuth flow */
-let pendingOAuthState: string | null = null;
-
-export function setPendingOAuthState(state: string): void {
-  pendingOAuthState = state;
-}
-
-export function consumePendingOAuthState(): string | null {
-  const state = pendingOAuthState;
-  pendingOAuthState = null;
-  return state;
-}
