@@ -2,12 +2,41 @@
   "version": 1,
   "jobs": [
     {
+      "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
+      "agentId": "main",
+      "name": "Moltbook Ghost Hunter",
+      "enabled": true,
+      "createdAtMs": 1771673100000,
+      "updatedAtMs": 1771673100000,
+      "schedule": {
+        "kind": "interval",
+        "durationMs": 14400000
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "command",
+        "command": [
+          "node",
+          "/home/teabagger/.openclaw/workspace/moltbook-ghost-hunter.js"
+        ],
+        "timeoutSeconds": 180
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771804800000
+      }
+    },
+    {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "agentId": "main",
       "name": "Morning Briefing",
       "enabled": true,
       "createdAtMs": 1771760000000,
-      "updatedAtMs": 1771760000000,
+      "updatedAtMs": 1771801380343,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -25,7 +54,12 @@
         "mode": "none"
       },
       "state": {
-        "consecutiveErrors": 0
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771887600000,
+        "lastRunAtMs": 1771801200081,
+        "lastStatus": "error",
+        "lastDurationMs": 180262,
+        "lastError": "Error: cron: job execution timed out"
       }
     }
   ]
