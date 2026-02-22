@@ -2,33 +2,6 @@
   "version": 1,
   "jobs": [
     {
-      "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
-      "agentId": "main",
-      "name": "Moltbook Ghost Hunter",
-      "enabled": true,
-      "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771760000000,
-      "schedule": {
-        "kind": "every",
-        "everyMs": 14400000,
-        "anchorMs": 1740000000
-      },
-      "sessionTarget": "isolated",
-      "wakeMode": "now",
-      "payload": {
-        "kind": "agentTurn",
-        "message": "Run Moltbook Ghost Hunter. Execute the script at /home/teabagger/.openclaw/workspace/moltbook-ghost-hunter.js using node. After the run completes, format a concise report of what was found and post it to the Discord #moltbook channel by calling POST http://127.0.0.1:18789/discord/post with body {\"channel\":\"moltbook\",\"message\":\"<report>\"} and Authorization: Bearer dev-token.",
-        "model": "zai/glm-4.7",
-        "timeoutSeconds": 180
-      },
-      "delivery": {
-        "mode": "none"
-      },
-      "state": {
-        "consecutiveErrors": 0
-      }
-    },
-    {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "agentId": "main",
       "name": "Morning Briefing",
