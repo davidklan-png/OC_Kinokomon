@@ -9,6 +9,7 @@
 *.bash
 workspace/
 logs/
+vault/.obsidian/
 identity/
 openclaw.json
 update-check.json

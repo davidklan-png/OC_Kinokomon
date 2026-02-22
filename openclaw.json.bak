@@ -149,7 +149,7 @@
           "alias": "Sonnet"
         }
       },
-      "workspace": "/home/teabagger/.openclaw/workspace",
+      "workspace": "/home/user/OC_Kinokomon/vault/00-System",
       "compaction": {
         "mode": "safeguard"
       },
@@ -181,37 +181,24 @@
     "nativeSkills": "auto"
   },
   "channels": {
-    "whatsapp": {
-      "dmPolicy": "allowlist",
-      "selfChatMode": true,
-      "allowFrom": [
-        "+819082669210"
-      ],
-      "groupAllowFrom": [
-        "+819082669210"
-      ],
-      "groupPolicy": "allowlist",
-      "textChunkLimit": 4000,
-      "mediaMaxMb": 50,
-      "debounceMs": 0
-    },
-    "slack": {
-      "mode": "socket",
-      "webhookPath": "/slack/events",
-      "userTokenReadOnly": true,
-      "groupPolicy": "allowlist",
-      "channels": {},
-      "accounts": {}
-    },
-    "line": {
+    "discord": {
       "enabled": true,
-      "channelAccessToken": "w9Fgexb81p782Toe0EINBX+yjdwwrwDNm1atVv3nwU1g+AalqarbKn5HeCUCrurAn5uM/Rw9i1i1i6MzwSsSDRJSJFG9+zh1CwIieriqnkQIoZFiRI7Bc83EA0lec3U0IGrnTm6/9PbANofIMbwWRwdB04t89/1O/w1cDnyilFU=",
-      "channelSecret": "0f96ef1291337343c381aaeeee74dbfb",
+      "botToken": "<DISCORD_BOT_TOKEN>",
+      "guildId": "<DISCORD_SERVER_ID>",
+      "gatewayUrl": "http://127.0.0.1:18789",
+      "gatewayToken": "dev-token",
+      "agentId": "main",
+      "channels": {
+        "general":    "<CHANNEL_ID_GENERAL>",
+        "summaries":  "<CHANNEL_ID_SUMMARIES>",
+        "moltbook":   "<CHANNEL_ID_MOLTBOOK>",
+        "biz_ideas":  "<CHANNEL_ID_BIZ_IDEAS>",
+        "monitoring": "<CHANNEL_ID_MONITORING>",
+        "briefing":   "<CHANNEL_ID_BRIEFING>"
+      },
+      "postOnlyChannels": ["monitoring", "briefing"],
       "dmPolicy": "allowlist",
-      "allowFrom": [
-        "U806bc4f730d471e2aa87266244c9facf"
-      ],
-      "webhookPath": "/line/webhook"
+      "allowFrom": ["<YOUR_DISCORD_USER_ID>"]
     }
   },
   "gateway": {
@@ -229,23 +216,17 @@
   },
   "plugins": {
     "entries": {
-      "slack": {
-        "enabled": true
-      },
-      "whatsapp": {
-        "enabled": true
-      },
-      "line": {
+      "discord": {
         "enabled": true
       }
     },
     "installs": {
-      "line": {
+      "discord": {
         "source": "path",
-        "sourcePath": "/usr/lib/node_modules/openclaw/extensions/line",
-        "installPath": "/home/teabagger/.openclaw/extensions/line",
-        "version": "2026.2.13",
-        "installedAt": "2026-02-16T01:27:14.085Z"
+        "sourcePath": "/home/user/OC_Kinokomon/extensions/discord",
+        "installPath": "/home/teabagger/.openclaw/extensions/discord",
+        "version": "2026.2.0",
+        "installedAt": "2026-02-22T00:00:00.000Z"
       }
     }
   }

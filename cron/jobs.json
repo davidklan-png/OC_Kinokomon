@@ -5,9 +5,9 @@
       "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
       "agentId": "main",
       "name": "Moltbook Ghost Hunter",
-      "enabled": false,
+      "enabled": true,
       "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771586525672,
+      "updatedAtMs": 1771760000000,
       "schedule": {
         "kind": "every",
         "everyMs": 14400000,
@@ -17,7 +17,34 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run Moltbook Ghost Hunter. Execute: /home/teabagger/.openclaw/workspace/node moltbook-ghost-hunter.js",
+        "message": "Run Moltbook Ghost Hunter. Execute the script at /home/teabagger/.openclaw/workspace/moltbook-ghost-hunter.js using node. After the run completes, format a concise report of what was found and post it to the Discord #moltbook channel by calling POST http://127.0.0.1:18789/discord/post with body {\"channel\":\"moltbook\",\"message\":\"<report>\"} and Authorization: Bearer dev-token.",
+        "model": "zai/glm-4.7",
+        "timeoutSeconds": 180
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "agentId": "main",
+      "name": "Morning Briefing",
+      "enabled": true,
+      "createdAtMs": 1771760000000,
+      "updatedAtMs": 1771760000000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "timezone": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Generate the morning briefing for today. Structure it as:\n\n## Morning Briefing — {TODAY_DATE}\n\n### Yesterday Highlights\nSummarise key threads and decisions from the past 24 hours across all Discord channels.\n\n### Today Focus\nList the top 3 priorities or action items based on recent #biz_ideas and #moltbook context.\n\n### Server Health\nReport last known status from monitoring logs.\n\n### Reminders\nAny pending items, scheduled events, or follow-ups.\n\nAfter generating the briefing, save it to vault/10-Daily/{YYYY}/{MM}/{YYYY-MM-DD}-briefing.md with proper frontmatter, then post it to Discord #briefing by calling POST http://127.0.0.1:18789/discord/post with body {\"channel\":\"briefing\",\"message\":\"<briefing>\"} and Authorization: Bearer dev-token.",
         "model": "zai/glm-4.7",
         "timeoutSeconds": 120
       },
@@ -25,33 +52,7 @@
         "mode": "none"
       },
       "state": {
-        "lastRunAtMs": 1771586401903,
-        "lastStatus": "error",
-        "lastDurationMs": 123769,
-        "consecutiveErrors": 2,
-        "lastError": "Error: cron: job execution timed out"
-      }
-    },
-    {
-      "id": "b662bf2a-e7ed-4b32-9e89-2a5dd404eca9",
-      "agentId": "main",
-      "name": "Re-enable Ghost Hunter after suspension",
-      "enabled": true,
-      "deleteAfterRun": true,
-      "createdAtMs": 1771586468945,
-      "updatedAtMs": 1771586468945,
-      "schedule": {
-        "kind": "at",
-        "at": "2026-02-21T11:25:00.000Z"
-      },
-      "sessionTarget": "main",
-      "wakeMode": "now",
-      "payload": {
-        "kind": "systemEvent",
-        "text": "🔓 Reminder: Moltbook Ghost Hunter suspension should be lifted. Re-enable cron job 990bbe20-b1a5-46e9-ad7e-4020b7ed53ae and test the improved verification handler in dry-run mode first."
-      },
-      "state": {
-        "nextRunAtMs": 1771673100000
+        "consecutiveErrors": 0
       }
     }
   ]
