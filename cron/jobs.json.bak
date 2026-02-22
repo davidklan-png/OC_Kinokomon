@@ -7,7 +7,7 @@
       "name": "Moltbook Ghost Hunter",
       "enabled": true,
       "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771716030360,
+      "updatedAtMs": 1771735524509,
       "schedule": {
         "kind": "every",
         "everyMs": 14400000,
@@ -25,11 +25,11 @@
         "mode": "none"
       },
       "state": {
-        "lastRunAtMs": 1771716002052,
+        "lastRunAtMs": 1771735413744,
         "lastStatus": "ok",
-        "lastDurationMs": 28308,
+        "lastDurationMs": 110765,
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1771730400000
+        "nextRunAtMs": 1771744800000
       }
     }
   ]
