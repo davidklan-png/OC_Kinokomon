@@ -25,8 +25,11 @@ Add `visibility:connections` at the start to limit the post to your connections 
 **Example:** `/linkedin visibility:connections Quick update for my network`
 
 ## Setup
-Run `openclaw linkedin-auth` to connect your LinkedIn account (one-time).
-Run `openclaw linkedin-status` to check your connection status.
+1. Run `openclaw linkedin-auth` — prints an authorization URL.
+2. Open the URL in your browser and authorize on LinkedIn.
+3. Copy the code from the callback page.
+4. Run `openclaw linkedin-auth --code=PASTE_CODE_HERE` to complete the connection.
+5. Run `openclaw linkedin-status` to verify.
 
 ## Limits
 LinkedIn allows 150 posts per member per day.
