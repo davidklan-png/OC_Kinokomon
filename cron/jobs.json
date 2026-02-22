@@ -19,7 +19,7 @@
         "kind": "agentTurn",
         "message": "Generate the morning briefing for today. Structure it as:\n\n## Morning Briefing — {TODAY_DATE}\n\n### Yesterday Highlights\nSummarise key threads and decisions from the past 24 hours across all Discord channels.\n\n### Today Focus\nList the top 3 priorities or action items based on recent #biz_ideas and #moltbook context.\n\n### Server Health\nReport last known status from monitoring logs.\n\n### Reminders\nAny pending items, scheduled events, or follow-ups.\n\nAfter generating the briefing, save it to vault/10-Daily/{YYYY}/{MM}/{YYYY-MM-DD}-briefing.md with proper frontmatter, then post it to Discord #briefing by calling POST http://127.0.0.1:18789/discord/post with body {\"channel\":\"briefing\",\"message\":\"<briefing>\"} and Authorization: Bearer dev-token.",
         "model": "zai/glm-4.7",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 180
       },
       "delivery": {
         "mode": "none"

@@ -5,9 +5,9 @@
       "id": "990bbe20-b1a5-46e9-ad7e-4020b7ed53ae",
       "agentId": "main",
       "name": "Moltbook Ghost Hunter",
-      "enabled": false,
+      "enabled": true,
       "createdAtMs": 1771358791222,
-      "updatedAtMs": 1771586525672,
+      "updatedAtMs": 1771745857539,
       "schedule": {
         "kind": "every",
         "everyMs": 14400000,
@@ -17,41 +17,19 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run Moltbook Ghost Hunter. Execute: /home/teabagger/.openclaw/workspace/node moltbook-ghost-hunter.js",
+        "message": "Run Moltbook Ghost Hunter. Execute: /home/teabagger/.openclaw/workspace/moltbook-ghost-hunter.js",
         "model": "zai/glm-4.7",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 180
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "lastRunAtMs": 1771586401903,
-        "lastStatus": "error",
-        "lastDurationMs": 123769,
-        "consecutiveErrors": 2,
-        "lastError": "Error: cron: job execution timed out"
-      }
-    },
-    {
-      "id": "b662bf2a-e7ed-4b32-9e89-2a5dd404eca9",
-      "agentId": "main",
-      "name": "Re-enable Ghost Hunter after suspension",
-      "enabled": true,
-      "deleteAfterRun": true,
-      "createdAtMs": 1771586468945,
-      "updatedAtMs": 1771586468945,
-      "schedule": {
-        "kind": "at",
-        "at": "2026-02-21T11:25:00.000Z"
-      },
-      "sessionTarget": "main",
-      "wakeMode": "now",
-      "payload": {
-        "kind": "systemEvent",
-        "text": "🔓 Reminder: Moltbook Ghost Hunter suspension should be lifted. Re-enable cron job 990bbe20-b1a5-46e9-ad7e-4020b7ed53ae and test the improved verification handler in dry-run mode first."
-      },
-      "state": {
-        "nextRunAtMs": 1771673100000
+        "lastRunAtMs": 1771745792888,
+        "lastStatus": "ok",
+        "lastDurationMs": 64651,
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771759200000
       }
     }
   ]

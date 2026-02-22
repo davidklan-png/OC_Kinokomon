@@ -1,9 +1,5 @@
 import { randomBytes } from "node:crypto";
-import {
-  saveTokens,
-  setPendingOAuthState,
-  consumePendingOAuthState,
-} from "./token-store.js";
+import { saveTokens } from "./token-store.js";
 
 const LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 const LINKEDIN_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
@@ -17,12 +13,11 @@ export interface LinkedInOAuthConfig {
 }
 
 /**
- * Generate the LinkedIn authorization URL and store the CSRF state.
+ * Generate the LinkedIn authorization URL.
  * The user opens this URL in their browser to authorize the app.
  */
 export function generateAuthUrl(config: LinkedInOAuthConfig): string {
   const state = randomBytes(16).toString("hex");
-  setPendingOAuthState(state);
 
   const params = new URLSearchParams({
     response_type: "code",
@@ -36,20 +31,14 @@ export function generateAuthUrl(config: LinkedInOAuthConfig): string {
 }
 
 /**
- * Handle the OAuth callback: validate state, exchange code for token,
- * fetch person URN, and store credentials.
+ * Exchange an authorization code for an access token, fetch the member's
+ * person URN, and store the credentials. Used after the user manually
+ * copies the code from the callback page.
  */
-export async function handleOAuthCallback(
+export async function exchangeCode(
   code: string,
-  state: string,
   config: LinkedInOAuthConfig,
-): Promise<{ success: boolean; error?: string }> {
-  const expectedState = consumePendingOAuthState();
-  if (!expectedState || state !== expectedState) {
-    return { success: false, error: "Invalid or expired OAuth state. Please restart the auth flow." };
-  }
-
-  // Exchange authorization code for access token
+): Promise<{ success: boolean; personUrn?: string; error?: string }> {
   const tokenResponse = await fetch(LINKEDIN_TOKEN_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -64,7 +53,10 @@ export async function handleOAuthCallback(
 
   if (!tokenResponse.ok) {
     const errBody = await tokenResponse.text();
-    return { success: false, error: `Token exchange failed (${tokenResponse.status}): ${errBody}` };
+    return {
+      success: false,
+      error: `Token exchange failed (${tokenResponse.status}): ${errBody}`,
+    };
   }
 
   const tokenData = (await tokenResponse.json()) as {
@@ -74,14 +66,17 @@ export async function handleOAuthCallback(
     refresh_token_expires_in?: number;
   };
 
-  // Fetch the member's person URN
+  // Fetch the member's person URN via OIDC userinfo
   const profileResponse = await fetch(LINKEDIN_PROFILE_URL, {
     headers: { Authorization: `Bearer ${tokenData.access_token}` },
   });
 
   if (!profileResponse.ok) {
     const errBody = await profileResponse.text();
-    return { success: false, error: `Profile fetch failed (${profileResponse.status}): ${errBody}` };
+    return {
+      success: false,
+      error: `Profile fetch failed (${profileResponse.status}): ${errBody}`,
+    };
   }
 
   const profileData = (await profileResponse.json()) as { sub: string };
@@ -98,27 +93,5 @@ export async function handleOAuthCallback(
     personUrn,
   });
 
-  return { success: true };
-}
-
-/** HTML page shown to the user after successful OAuth authorization */
-export const SUCCESS_HTML = `<!doctype html>
-<html><head><meta charset="utf-8"><title>LinkedIn Connected</title>
-<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0a0a0a;color:#fff}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:32px;text-align:center;max-width:400px}
-h1{color:#0a66c2;margin-top:0}.ok{color:#24e08a;font-size:48px}</style></head>
-<body><div class="card"><div class="ok">&#10003;</div><h1>LinkedIn Connected</h1>
-<p>Your LinkedIn account has been linked to OpenClaw. You can close this tab.</p>
-<p style="opacity:0.6;font-size:13px">Use <code>/linkedin</code> from any channel to post.</p></div></body></html>`;
-
-/** HTML page shown on OAuth failure */
-export function errorHtml(message: string): string {
-  return `<!doctype html>
-<html><head><meta charset="utf-8"><title>LinkedIn Auth Error</title>
-<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0a0a0a;color:#fff}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:32px;text-align:center;max-width:400px}
-h1{color:#ff5c5c;margin-top:0}.err{color:#ff5c5c;font-size:48px}</style></head>
-<body><div class="card"><div class="err">&#10007;</div><h1>Authentication Failed</h1>
-<p>${message}</p>
-<p style="opacity:0.6;font-size:13px">Run <code>openclaw linkedin-auth</code> to try again.</p></div></body></html>`;
+  return { success: true, personUrn };
 }
