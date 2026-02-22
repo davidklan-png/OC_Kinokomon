@@ -1,9 +1,7 @@
 import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
 import {
   generateAuthUrl,
-  handleOAuthCallback,
-  SUCCESS_HTML,
-  errorHtml,
+  exchangeCode,
   type LinkedInOAuthConfig,
 } from "./src/oauth-callback.js";
 import { postText, postArticle, postImage } from "./src/linkedin-client.js";
@@ -41,22 +39,34 @@ const plugin = {
     const config = api.config as Record<string, unknown>;
     const oauthConfig = getOAuthConfig(config);
 
-    // ── CLI command: openclaw linkedin-auth ────────────────────────
+    // ── CLI commands: openclaw linkedin-auth / linkedin-status ───
     api.registerCli(
       ({ program }) => {
         program
           .command("linkedin-auth")
           .description("Authenticate with LinkedIn (one-time OAuth setup)")
-          .action(async () => {
+          .option("--code <code>", "Authorization code from the callback page")
+          .action(async (opts: { code?: string }) => {
+            if (opts.code) {
+              // Step 2: Exchange the pasted code for a token
+              console.log("\nExchanging authorization code...");
+              const result = await exchangeCode(opts.code.trim(), oauthConfig);
+              if (result.success) {
+                console.log(`\n✅ LinkedIn connected! (${result.personUrn})`);
+                console.log("You can now use /linkedin from any channel to post.\n");
+              } else {
+                console.error(`\n❌ ${result.error}\n`);
+              }
+              return;
+            }
+
+            // Step 1: Show the auth URL
             const url = generateAuthUrl(oauthConfig);
-            console.log("\n🔗 Open this URL in your browser to authorize LinkedIn:\n");
+            console.log("\n🔗 Step 1: Open this URL in your browser:\n");
             console.log(`  ${url}\n`);
-            console.log(
-              "After authorizing, LinkedIn will redirect to your callback URL.",
-            );
-            console.log(
-              "The gateway will handle the token exchange automatically.\n",
-            );
+            console.log("🔗 Step 2: After authorizing, copy the code from the callback page.\n");
+            console.log("🔗 Step 3: Run this command with the code:\n");
+            console.log("  openclaw linkedin-auth --code=PASTE_CODE_HERE\n");
           });
 
         program
@@ -73,46 +83,6 @@ const plugin = {
           });
       },
       { commands: ["linkedin-auth", "linkedin-status"] },
-    );
-
-    // ── Gateway webhook: /linkedin/callback ───────────────────────
-    api.registerGatewayMethod(
-      "linkedin.oauth-callback",
-      async ({ request, respond }) => {
-        const url = new URL(request.url, "http://localhost");
-        const code = url.searchParams.get("code");
-        const state = url.searchParams.get("state");
-        const error = url.searchParams.get("error");
-
-        if (error) {
-          const desc =
-            url.searchParams.get("error_description") ?? "Authorization denied";
-          respond(false, {
-            contentType: "text/html",
-            body: errorHtml(decodeURIComponent(desc)),
-          });
-          return;
-        }
-
-        if (!code || !state) {
-          respond(false, {
-            contentType: "text/html",
-            body: errorHtml("Missing authorization code or state parameter."),
-          });
-          return;
-        }
-
-        const result = await handleOAuthCallback(code, state, oauthConfig);
-
-        if (result.success) {
-          respond(true, { contentType: "text/html", body: SUCCESS_HTML });
-        } else {
-          respond(false, {
-            contentType: "text/html",
-            body: errorHtml(result.error ?? "Unknown error"),
-          });
-        }
-      },
     );
 
     // ── Auto-reply command: /linkedin ─────────────────────────────
