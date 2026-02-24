@@ -1,0 +1,161 @@
+skill:
+  name: bio_hp_kinokomon_orchestrator
+  version: 1.1.0
+  description: >
+    Orchestrates governed website updates for the Bio_HP Jekyll repo.
+    Nightly autonomous updates are allowed ONLY for the Kinokomon page
+    (https://kinokoholic.com/kinokomon/), which maps to kinokomon.md (permalink /kinokomon/).
+    All other site changes require an explicit user request.
+
+  repo:
+    provider: github
+    owner: davidklan-png
+    name: Bio_HP
+    default_branch: main
+
+  governance:
+    autonomous_allowlist:
+      # The only URL allowed to change without the user asking:
+      - "https://kinokoholic.com/kinokomon/"
+    repo_allowlist_paths:
+      # The only repo paths allowed to change in scheduled runs:
+      - "kinokomon.md"
+      # Optional (off by default): allow adding subpages under /kinokomon/
+      - "kinokomon/**"
+    user_request_required_for_everything_else: true
+
+    notes:
+      # Mirrors the repo’s own stated boundary: Kinokomon page has creative freedom;
+      # rest of site needs explicit human direction.
+      - "Kinokomon page is autonomous creative space; rest of site restricted." # (documented)
+
+  triggers:
+    manual:
+      - name: update_site
+        description: User-requested update for any part of the site.
+        inputs: [url, instructions]
+    scheduled:
+      - name: nightly_kinokomon_update
+        description: Autonomous nightly update for /kinokomon/ only.
+        schedule_ref: "cron.kinokomon_nightly_8pm_tokyo"
+
+  schedules:
+    cron:
+      kinokomon_nightly_8pm_tokyo:
+        timezone: "Asia/Tokyo"
+        expression: "0 20 * * *"  # Every day at 20:00
+
+  agents:
+    - id: architect
+      role: Architecture & planning
+      responsibilities:
+        - map requested URL -> repo path(s)
+        - define update plan + acceptance criteria + change-scope constraints
+        - specify content contract for the Kinokomon “Projects & Engagements” section
+        - specify test plan for any non-content code changes
+        - define verification checklist for the verifier agent
+
+    - id: developer
+      role: Developer (TDD)
+      responsibilities:
+        - implement plan via tests-first where code changes are required
+        - generate “Projects & Engagements” summary from approved sources
+        - update markdown deterministically and safely
+        - run repo gates (tdd_guard / CI-equivalent locally where possible)
+        - create PR for manual requests; may direct-push for scheduled allowlisted updates (configurable)
+
+    - id: verifier
+      role: Verification / QA
+      responsibilities:
+        - ensure output matches architect plan exactly
+        - ensure scheduled runs modify only allowlisted repo paths
+        - ensure summary meets content contract
+        - ensure checks pass and publish action is consistent with repo rules
+        - produce a verification report with file diffs and hashes
+
+  sources_of_truth:
+    # Use repo content that already exists as the grounding dataset.
+    # shared/profile.json contains a structured projects list with evidence URLs.
+    projects_dataset: "shared/profile.json"
+    kinokomon_page: "kinokomon.md"
+
+  adapters:
+    git_update:
+      id: github_https_or_ssh
+      description: >
+        Clone repo, modify files, run checks, commit, push.
+        Manual updates open a PR. Scheduled Kinokomon updates may push directly OR open PR and auto-merge (policy knob).
+      config:
+        clone_url: "https://github.com/davidklan-png/Bio_HP.git"
+        author_name: "Kinokomon"
+        author_email: "kinokomon@kinokoholic.com"
+        scheduled_update_mode: "direct_push"   # or "pr_auto_merge"
+        pr_base_branch: "main"
+
+  workflow:
+    update_site:
+      steps:
+        - name: policy_gate
+          run: orchestrator.policy_gate(trigger="manual", url=url, instructions=instructions)
+
+        - name: architect_plan
+          run: orchestrator.spawn(agent="architect", task="plan_update", args={url, instructions})
+
+        - name: developer_implement
+          run: orchestrator.spawn(agent="developer", task="implement_with_tdd",
+                                  args={plan_ref: architect.plan_ref})
+
+        - name: verifier_check
+          run: orchestrator.spawn(agent="verifier", task="verify_against_plan",
+                                  args={plan_ref: architect.plan_ref, build_ref: developer.build_ref})
+
+        - name: finalize
+          run: orchestrator.finalize_and_log()
+
+    nightly_kinokomon_update:
+      steps:
+        - name: policy_gate
+          run: orchestrator.policy_gate(trigger="scheduled", url="https://kinokoholic.com/kinokomon/")
+
+        - name: architect_plan
+          run: orchestrator.spawn(agent="architect", task="plan_kinokomon_nightly_update",
+                                  args={url: "https://kinokoholic.com/kinokomon/"})
+
+        - name: developer_implement
+          run: orchestrator.spawn(agent="developer", task="implement_with_tdd",
+                                  args={plan_ref: architect.plan_ref})
+
+        - name: verifier_check
+          run: orchestrator.spawn(agent="verifier", task="verify_against_plan",
+                                  args={plan_ref: architect.plan_ref, build_ref: developer.build_ref})
+
+        - name: finalize
+          run: orchestrator.finalize_and_log()
+
+  policy_gate:
+    scheduled:
+      url_must_equal: "https://kinokoholic.com/kinokomon/"
+      repo_paths_must_be_subset_of:
+        - "kinokomon.md"
+        - "kinokomon/**"
+    manual:
+      require_explicit_user_instructions: true
+
+  kinokomon_update_contract:
+    target_file: "kinokomon.md"
+    insertion_strategy:
+      # First run inserts markers; subsequent runs replace contents between them.
+      start_marker: "<!-- AUTOGEN:KINOKOMON_PROJECTS_ENGAGEMENTS:START -->"
+      end_marker:   "<!-- AUTOGEN:KINOKOMON_PROJECTS_ENGAGEMENTS:END -->"
+    content_requirements:
+      - "High-level summary of current projects and engagements"
+      - "Use shared/profile.json projects[] as the canonical projects list"
+      - "Include only public-safe info + links already present in evidence URLs"
+      - "Concise: 6–12 bullets total; no confidential details; no commitments"
+      - "Idempotent output given same inputs (stable ordering, stable wording rules)"
+
+  checks:
+    local_quality_gates:
+      - "python3 scripts/tdd_guard.py --against origin/main (when applicable)"
+      - "repo unit tests / linters if touched code requires it"
+      - "jekyll build (optional, if configured in the runner)"
