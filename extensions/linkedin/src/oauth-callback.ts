@@ -4,7 +4,9 @@ import { saveTokens } from "./token-store.js";
 const LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 const LINKEDIN_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
 const LINKEDIN_PROFILE_URL = "https://api.linkedin.com/v2/userinfo";
-const SCOPES = "openid profile w_member_social";
+// Scopes for reading + posting
+// Note: r_mailbox (DMs) requires LinkedIn partnership approval
+const SCOPES = "openid profile r_basicprofile r_member_social w_member_social";
 
 export interface LinkedInOAuthConfig {
   clientId: string;

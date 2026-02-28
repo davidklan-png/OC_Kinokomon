@@ -3,6 +3,9 @@ import { getValidToken } from "./token-store.js";
 
 const UGC_POSTS_URL = "https://api.linkedin.com/v2/ugcPosts";
 const ASSETS_URL = "https://api.linkedin.com/v2/assets?action=registerUpload";
+const PROFILE_URL = "https://api.linkedin.com/v2/userinfo";
+const ME_URL = "https://api.linkedin.com/v2/me";
+const SOCIAL_ACTIONS_URL = "https://api.linkedin.com/v2/socialActions";
 
 type Visibility = "PUBLIC" | "CONNECTIONS";
 
@@ -233,4 +236,199 @@ export async function postImage(
 
   const postId = postRes.headers.get("X-RestLi-Id") ?? undefined;
   return { success: true, postId, warning: auth.warning };
+}
+
+// ============================================================================
+// READING FUNCTIONS
+// ============================================================================
+
+export interface ProfileInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  headline?: string;
+  profilePicture?: string;
+}
+
+export interface EngagementStats {
+  likes: number;
+  comments: number;
+  shares: number;
+  impressions?: number;
+}
+
+export interface CommentInfo {
+  id: string;
+  text: string;
+  authorName: string;
+  authorHeadline?: string;
+  createdAt: number;
+  likes: number;
+}
+
+export interface PostInfo {
+  id: string;
+  text: string;
+  createdAt: number;
+  visibility: string;
+  engagement: EngagementStats;
+  comments?: CommentInfo[];
+}
+
+/**
+ * Get your LinkedIn profile information.
+ */
+export async function getProfile(): Promise<{ success: boolean; profile?: ProfileInfo; error?: string }> {
+  const auth = await getAuth();
+  if (!auth) {
+    return { success: false, error: "Not authenticated. Run `openclaw linkedin-auth` first." };
+  }
+
+  const res = await fetch(PROFILE_URL, {
+    headers: linkedInHeaders(auth.token),
+  });
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    return { success: false, error: `Profile fetch failed (${res.status}): ${errBody}` };
+  }
+
+  const data = (await res.json()) as {
+    sub: string;
+    given_name?: string;
+    family_name?: string;
+    name?: string;
+    picture?: string;
+  };
+
+  return {
+    success: true,
+    profile: {
+      id: data.sub,
+      firstName: data.given_name || data.name?.split(" ")[0] || "",
+      lastName: data.family_name || data.name?.split(" ").slice(1).join(" ") || "",
+      profilePicture: data.picture,
+    },
+  };
+}
+
+/**
+ * Get your recent posts with engagement data.
+ * Note: LinkedIn API requires pagination - returns up to 10 posts by default.
+ */
+export async function getMyPosts(
+  count: number = 10,
+): Promise<{ success: boolean; posts?: PostInfo[]; error?: string }> {
+  const auth = await getAuth();
+  if (!auth) {
+    return { success: false, error: "Not authenticated. Run `openclaw linkedin-auth` first." };
+  }
+
+  // LinkedIn requires author URN to fetch posts
+  if (!auth.personUrn || auth.personUrn.startsWith("unknown")) {
+    return { success: false, error: "Cannot fetch posts without valid person URN." };
+  }
+
+  // Build the URL with query params
+  const url = new URL(UGC_POSTS_URL);
+  url.searchParams.set("q", "authors");
+  url.searchParams.set("authors", "List(" + encodeURIComponent(auth.personUrn) + ")");
+  url.searchParams.set("count", String(count));
+
+  const res = await fetch(url.toString(), {
+    headers: linkedInHeaders(auth.token),
+  });
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    return { success: false, error: `Posts fetch failed (${res.status}): ${errBody}` };
+  }
+
+  const data = (await res.json()) as {
+    elements?: Array<{
+      id: string;
+      specificContent?: {
+        "com.linkedin.ugc.ShareContent"?: {
+          shareCommentary?: { text?: string };
+        };
+      };
+      created?: { time?: number };
+      lifecycleState?: string;
+      visibility?: { "com.linkedin.ugc.MemberNetworkVisibility"?: string };
+    }>;
+  };
+
+  const posts: PostInfo[] = (data.elements || []).map((post) => ({
+    id: post.id,
+    text: post.specificContent?.["com.linkedin.ugc.ShareContent"]?.shareCommentary?.text || "",
+    createdAt: post.created?.time || 0,
+    visibility: post.visibility?.["com.linkedin.ugc.MemberNetworkVisibility"] || "PUBLIC",
+    engagement: { likes: 0, comments: 0, shares: 0 }, // Will be fetched separately
+  }));
+
+  return { success: true, posts };
+}
+
+/**
+ * Get engagement (likes, comments) for a specific post.
+ */
+export async function getPostEngagement(
+  postUrn: string,
+): Promise<{ success: boolean; engagement?: EngagementStats; comments?: CommentInfo[]; error?: string }> {
+  const auth = await getAuth();
+  if (!auth) {
+    return { success: false, error: "Not authenticated. Run `openclaw linkedin-auth` first." };
+  }
+
+  // Fetch social actions (likes, comments summary)
+  const socialUrl = `${SOCIAL_ACTIONS_URL}/${encodeURIComponent(postUrn)}`;
+  const socialRes = await fetch(socialUrl, {
+    headers: linkedInHeaders(auth.token),
+  });
+
+  let engagement: EngagementStats = { likes: 0, comments: 0, shares: 0 };
+
+  if (socialRes.ok) {
+    const socialData = (await socialRes.json()) as {
+      likesSummary?: { totalLikes?: number };
+      commentsSummary?: { totalComments?: number };
+      sharesSummary?: { totalShares?: number };
+    };
+    engagement = {
+      likes: socialData.likesSummary?.totalLikes || 0,
+      comments: socialData.commentsSummary?.totalComments || 0,
+      shares: socialData.sharesSummary?.totalShares || 0,
+    };
+  }
+
+  // Fetch comments (first page)
+  const commentsUrl = `${SOCIAL_ACTIONS_URL}/${encodeURIComponent(postUrn)}/comments`;
+  const commentsRes = await fetch(commentsUrl, {
+    headers: linkedInHeaders(auth.token),
+  });
+
+  let comments: CommentInfo[] = [];
+
+  if (commentsRes.ok) {
+    const commentsData = (await commentsRes.json()) as {
+      elements?: Array<{
+        id: string;
+        message?: { text?: string };
+        actor?: { name?: string; headline?: string };
+        created?: { time?: number };
+        likesSummary?: { totalLikes?: number };
+      }>;
+    };
+
+    comments = (commentsData.elements || []).map((c) => ({
+      id: c.id,
+      text: c.message?.text || "",
+      authorName: c.actor?.name || "Unknown",
+      authorHeadline: c.actor?.headline,
+      createdAt: c.created?.time || 0,
+      likes: c.likesSummary?.totalLikes || 0,
+    }));
+  }
+
+  return { success: true, engagement, comments };
 }

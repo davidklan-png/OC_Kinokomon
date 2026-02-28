@@ -4,7 +4,7 @@ import {
   exchangeCode,
   type LinkedInOAuthConfig,
 } from "./src/oauth-callback.js";
-import { postText, postArticle, postImage } from "./src/linkedin-client.js";
+import { postText, postArticle, postImage, getProfile, getMyPosts, getPostEngagement } from "./src/linkedin-client.js";
 import { getValidToken } from "./src/token-store.js";
 
 function getOAuthConfig(pluginConfig: Record<string, unknown>): LinkedInOAuthConfig {
@@ -138,6 +138,85 @@ const plugin = {
         // Text post
         const result = await postText(remaining, visibility);
         return formatResult(result, "text");
+      },
+    });
+
+    // ── Reading command: /linkedin-profile ────────────────────────
+    api.registerCommand({
+      name: "linkedin-profile",
+      description: "Get your LinkedIn profile information",
+      handler: async () => {
+        const result = await getProfile();
+        if (!result.success || !result.profile) {
+          return { text: `❌ ${result.error}` };
+        }
+        const p = result.profile;
+        return {
+          text: `**LinkedIn Profile**\n• Name: ${p.firstName} ${p.lastName}\n• ID: ${p.id}${p.headline ? `\n• Headline: ${p.headline}` : ""}`,
+        };
+      },
+    });
+
+    // ── Reading command: /linkedin-posts ──────────────────────────
+    api.registerCommand({
+      name: "linkedin-posts",
+      description: "List your recent LinkedIn posts with engagement",
+      handler: async (ctx) => {
+        const count = parseInt(ctx.commandBody?.trim() || "5", 10) || 5;
+        const result = await getMyPosts(Math.min(count, 10));
+
+        if (!result.success || !result.posts) {
+          return { text: `❌ ${result.error}` };
+        }
+
+        if (result.posts.length === 0) {
+          return { text: "No posts found." };
+        }
+
+        let text = `**Recent LinkedIn Posts** (${result.posts.length})\n\n`;
+        for (const post of result.posts) {
+          const preview = post.text.slice(0, 100) + (post.text.length > 100 ? "..." : "");
+          const date = post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown date";
+          text += `• **${date}** — ${preview}\n`;
+          text += `  ID: \`${post.id}\`\n\n`;
+        }
+        text += "Use `/linkedin-engagement <post-id>` to get detailed engagement data.";
+        return { text };
+      },
+    });
+
+    // ── Reading command: /linkedin-engagement ─────────────────────
+    api.registerCommand({
+      name: "linkedin-engagement",
+      description: "Get engagement details for a specific LinkedIn post",
+      handler: async (ctx) => {
+        const postUrn = ctx.commandBody?.trim();
+        if (!postUrn) {
+          return { text: "Usage: `/linkedin-engagement <post-urn-or-id>`" };
+        }
+
+        const result = await getPostEngagement(postUrn);
+
+        if (!result.success) {
+          return { text: `❌ ${result.error}` };
+        }
+
+        let text = "**📊 Post Engagement**\n\n";
+        text += `• **Likes**: ${result.engagement?.likes || 0}\n`;
+        text += `• **Comments**: ${result.engagement?.comments || 0}\n`;
+        text += `• **Shares**: ${result.engagement?.shares || 0}\n`;
+
+        if (result.comments && result.comments.length > 0) {
+          text += `\n**Recent Comments** (${result.comments.length})\n\n`;
+          for (const c of result.comments.slice(0, 5)) {
+            const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString() : "";
+            text += `• **${c.authorName}**${c.authorHeadline ? ` (${c.authorHeadline})` : ""}\n`;
+            text += `  "${c.text.slice(0, 150)}${c.text.length > 150 ? "..." : ""}"\n`;
+            text += `  ${date} • ${c.likes} likes\n\n`;
+          }
+        }
+
+        return { text };
       },
     });
   },

@@ -21,3 +21,7 @@ agents/main/sessions/*.jsonl.lock
 credentials/
 devices/
 subagents/
+agents/main/qmd/
+browser/
+media/browser/
+media/inbound/*.txt

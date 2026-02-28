@@ -7,7 +7,7 @@
       "name": "Morning Briefing",
       "enabled": true,
       "createdAtMs": 1771760000000,
-      "updatedAtMs": 1771887669571,
+      "updatedAtMs": 1772233327140,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -26,10 +26,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1771974000000,
-        "lastRunAtMs": 1771887600007,
+        "nextRunAtMs": 1772319600000,
+        "lastRunAtMs": 1772233203996,
         "lastStatus": "ok",
-        "lastDurationMs": 69564,
+        "lastDurationMs": 123144,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
@@ -39,35 +39,36 @@
       "id": "7ebc13e0-912b-46f9-8864-a4a2fc81bb88",
       "agentId": "main",
       "sessionKey": "agent:main:discord:channel:1475120520038191337",
-      "name": "Moltbook Daily Engagement",
+      "name": "Moltbook Engagement",
       "enabled": true,
       "createdAtMs": 1771839426931,
-      "updatedAtMs": 1771884212083,
+      "updatedAtMs": 1772251618453,
       "schedule": {
         "kind": "cron",
-        "expr": "0 7 * * *",
-        "tz": "Asia/Tokyo"
+        "expr": "0 */4 * * *",
+        "tz": "Asia/Tokyo",
+        "staggerMs": 300000
       },
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Execute the daily Moltbook engagement routine:\n\n1. Fetch trending posts from Moltbook API (use credentials from workspace/moltbook-credentials.json)\n2. Identify 3 top posts by engagement (upvotes, comments)\n3. For each topic, do independent investigation and form an original perspective\n4. Select 1 topic where you can add the most value\n5. Post a high-quality comment that adds original insight\n6. Verify the math challenge carefully before submitting\n7. Post a summary to Discord #moltbook\n\nSave session notes to vault/40-Moltbook/{date}-engagement.md",
+        "message": "Execute the daily Moltbook engagement routine:\n\n1. Fetch trending posts from Moltbook API (use credentials from workspace/moltbook-credentials.json)\n2. Identify 3 top posts by engagement (upvotes, comments)\n3. For each topic, do independent investigation and form an original perspective\n4. Select 1 topic where you can add the most value\n5. Post a high-quality comment that adds original insight\n6. **Math challenge protocol**:\n   - Strip noise: [ ] { } ( ) | / - \\ ^ * . _ ~\n   - Normalize to lowercase\n   - Read the word problem (it's always about lobsters)\n   - Extract numbers and operations\n   - Calculate, format to 2 decimal places\n   - NEVER guess — one wrong attempt fails\n7. **If verification fails**: Retry immediately by posting a new comment to the same thread with a new challenge\n8. Post a summary to Discord #moltbook\n\nSave session notes to vault/40-Moltbook/{date}-engagement.md\nReference: vault/40-Moltbook/moltbook-math-challenges.md",
         "model": "zai/glm-4.7",
-        "timeoutSeconds": 300
+        "timeoutSeconds": 420
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1771970400000,
-        "lastRunAtMs": 1771884000169,
+        "nextRunAtMs": 1772262205723,
+        "lastRunAtMs": 1772251419842,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 211914,
-        "lastDelivered": false,
+        "lastDurationMs": 198611,
         "lastDeliveryStatus": "not-delivered",
-        "consecutiveErrors": 0
+        "consecutiveErrors": 0,
+        "lastDelivered": false
       }
     },
     {
@@ -77,7 +78,7 @@
       "name": "Kinokomon Nightly Update",
       "enabled": true,
       "createdAtMs": 1771930682150,
-      "updatedAtMs": 1771931120544,
+      "updatedAtMs": 1772190406426,
       "schedule": {
         "kind": "cron",
         "expr": "0 20 * * *",
@@ -87,9 +88,9 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run the Bio_HP orchestrator skill to update the Kinokomon page at https://kinokoholic.com/kinokomon/\n\n1. Fetch shared/profile.json from the Bio_HP repo\n2. Extract projects list with evidence URLs\n3. Generate high-level summary of current projects (6-12 bullets)\n4. Include only public-safe info from evidence URLs\n5. Update kinokomon.md between the AUTOGEN markers\n6. Direct-push to main branch\n7. Post summary to #kinokoholic channel",
+        "message": "Run the Bio_HP orchestrator skill to update the Kinokomon page at https://kinokoholic.com/kinokomon/\n\n**Update Recent Activity section**:\n1. Add latest autonomous action (nightly update completion)\n2. Add any new milestones from vault notes or system configs\n3. Keep last 5-7 autonomous actions (with timestamps)\n4. Keep last 7-10 milestones (most recent first)\n5. Update both main page and activity subpage\n\n**Update Current Projects section**:\n1. Fetch shared/profile.json from the Bio_HP repo\n2. Extract projects list with evidence URLs\n3. Generate high-level summary of current projects (6-12 bullets)\n4. Include only public-safe info from evidence URLs\n\n**Finalize**:\n- Direct-push to main branch\n- Post summary to #kinokoholic channel",
         "model": "zai/glm-4.7",
-        "timeoutSeconds": 300
+        "timeoutSeconds": 420
       },
       "delivery": {
         "mode": "announce",
@@ -97,14 +98,119 @@
         "channel": "discord"
       },
       "state": {
-        "nextRunAtMs": 1772017200000,
-        "lastRunAtMs": 1771930803544,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 317000,
-        "lastError": "cron: job execution timed out",
-        "lastDeliveryStatus": "unknown",
-        "consecutiveErrors": 1
+        "nextRunAtMs": 1772276400000,
+        "lastRunAtMs": 1772190001910,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 404516,
+        "lastDeliveryStatus": "delivered",
+        "consecutiveErrors": 0,
+        "lastDelivered": true
+      }
+    },
+    {
+      "id": "780a2b97-da2e-48f2-ac65-ef36631cdbce",
+      "agentId": "main",
+      "sessionKey": "agent:main:discord:channel:1475989291036311716",
+      "name": "LinkedIn Weekly Strategic Brief",
+      "enabled": true,
+      "createdAtMs": 1771974906430,
+      "updatedAtMs": 1771975007940,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * 0",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Generate the Weekly LinkedIn Intelligence Brief.\n\n**Tasks**:\n1. Review all LinkedIn engagements from the past 7 days in vault/70-Engagements/\n2. Analyze DM trends, engagement patterns, and connection quality\n3. Identify content gaps and high-value opportunities\n4. Generate the weekly brief in this format:\n\n```markdown\n📈 Weekly LinkedIn Intelligence Brief — {DATE}\n\nTop Engagement Drivers:\n- [Most engaging content type/topic]\n- [Second driver]\n- [Third driver]\n\nDM Trends:\n- [Trend pattern 1]\n- [Trend pattern 2]\n\nHigh-Value New Connections:\n- [Connection 1 with brief context]\n- [Connection 2 with brief context]\n\nContent Gaps:\n- [Topic 1 missing from content calendar]\n- [Topic 2]\n\nSuggested Focus for Next Week:\n- [Actionable recommendation 1]\n- [Actionable recommendation 2]\n```\n\n**Constraints**:\n- Keep under 400 words\n- If insufficient engagement data exists, note what data is needed\n\n**Output**:\n1. Save brief to vault/70-Engagements/YYYY-MM-DD-weekly-brief.md\n2. Post to Discord #linkedin channel (target: 1475989291036311716)",
+        "model": "zai/glm-4.7",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772323200000,
+        "lastRunAtMs": 1771974948992,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 58948,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "ceac62ad-e946-488a-aa87-75f9eda49c7e",
+      "agentId": "main",
+      "sessionKey": "agent:main:discord:channel:1475989291036311716",
+      "name": "LinkedIn Midday Engagement Check",
+      "enabled": true,
+      "createdAtMs": 1771983872407,
+      "updatedAtMs": 1772251629036,
+      "schedule": {
+        "expr": "0 12 * * *",
+        "kind": "cron",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "**LinkedIn Midday Engagement Check**\n\n**CRITICAL: You MUST use the browser tool to read LinkedIn.**\n\n**Step 0: Connection Health Check**\n```\nUse browser tool: action=status, profile=chrome\nUse browser tool: action=tabs, profile=chrome\n```\nIf connection fails, post to #linkedin (1475989291036311716):\n> ⚠️ LinkedIn check failed: Browser connection unavailable. Please refresh LinkedIn page and re-attach extension.\n\n**Step 1: Open Fresh LinkedIn Notifications Tab**\n```\nUse browser tool: action=open, profile=chrome, targetUrl=https://www.linkedin.com/notifications/\n```\nNote the targetId returned.\n\n**Step 2: Wait for Page Load**\nWait 3-5 seconds for page to fully load before snapshot.\n\n**Step 3: Snapshot with Fresh Target**\n```\nUse browser tool: action=snapshot, profile=chrome, snapshotFormat=ai, targetId=<FRESH_TARGET_ID>\n```\n\n**Step 4: Extract Notifications**\nParse the snapshot for:\n- Mentions of you\n- Comments on your posts\n- Reactions to your content\n- Profile views\n- DMs (if visible)\n\n**Step 5: Identify Engagement Opportunities** (max 3)\nFilter by signal score (Lead 5+, Authority 6+, Strategic 6+)\n\n**Step 6: Generate Response Proposals**\nFor each opportunity:\n```markdown\n## [Author] — [Post Preview]\n\n**Signal Scores**: Lead X | Authority Y | Strategic Z\n**Action Type**: [Reply to comment / Respond to post / DM reply]\n\n**Draft Options**:\n- Option A (Safe): [draft]\n- Option B (Thoughtful): [draft]\n- Option C (Bold): [draft]\n\n**Recommendation**: [A/B/C] — [reason]\n```\n\n**Step 7: Post Summary to #linkedin**\nUse message tool: action=send, channel=discord, target=1475989291036311716\n\n**Error Handling**:\n- If snapshot fails with \"tab not found\", post error to #linkedin\n- If browser tool fails completely, post error to #linkedin\n- Do NOT retry indefinitely — post error and exit\n\n**Constraints**:\n- Follow LINKEDIN-PROTOCOL.md\n- Max 150 words per draft\n- No emojis unless requested\n- No responses sent without approval",
+        "model": "zai/glm-4.7",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772334000000,
+        "lastRunAtMs": 1772251618453,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 10583,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "321025a2-d714-4293-9592-30b8c509ad4b",
+      "agentId": "main",
+      "sessionKey": "agent:main:discord:channel:1475989291036311716",
+      "name": "LinkedIn Evening Engagement Check",
+      "enabled": true,
+      "createdAtMs": 1771983872432,
+      "updatedAtMs": 1772182957436,
+      "schedule": {
+        "expr": "0 18 * * *",
+        "kind": "cron",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "**LinkedIn Evening Engagement Check**\n\n**CRITICAL: You MUST use the browser tool to read LinkedIn.**\n\n**Step 0: Connection Health Check**\n```\nUse browser tool: action=status, profile=chrome\nUse browser tool: action=tabs, profile=chrome\n```\nIf connection fails, post to #linkedin (1475989291036311716):\n> ⚠️ LinkedIn check failed: Browser connection unavailable. Please refresh LinkedIn page and re-attach extension.\n\n**Step 1: Open Fresh LinkedIn Notifications Tab**\n```\nUse browser tool: action=open, profile=chrome, targetUrl=https://www.linkedin.com/notifications/\n```\nNote the targetId returned.\n\n**Step 2: Wait for Page Load**\nWait 3-5 seconds for page to fully load before snapshot.\n\n**Step 3: Snapshot with Fresh Target**\n```\nUse browser tool: action=snapshot, profile=chrome, snapshotFormat=ai, targetId=<FRESH_TARGET_ID>\n```\n\n**Step 4: Extract Notifications**\nParse the snapshot for:\n- New mentions since midday check\n- Replies to your comments\n- New reactions\n- Profile views\n\n**Step 5: Check for Replies to Your Comments**\nOpen specific post URLs where you commented today and check for replies.\n\n**Step 6: Identify Engagement Opportunities** (max 3)\nPrioritize: replies to your comments > mentions > relevant feed posts\n\n**Step 7: Generate Response Proposals**\nFor each opportunity:\n```markdown\n## [Author] — [Post Preview]\n\n**Signal Scores**: Lead X | Authority Y | Strategic Z\n**Action Type**: [Reply to comment / Respond to post / DM reply]\n\n**Draft Options**:\n- Option A (Safe): [draft]\n- Option B (Thoughtful): [draft]\n- Option C (Bold): [draft]\n\n**Recommendation**: [A/B/C] — [reason]\n```\n\n**Step 8: Post Summary to #linkedin**\nUse message tool: action=send, channel=discord, target=1475989291036311716\n\n**Error Handling**:\n- If snapshot fails with \"tab not found\", post error to #linkedin\n- If browser tool fails completely, post error to #linkedin\n- Do NOT retry indefinitely — post error and exit\n\n**Constraints**:\n- Follow LINKEDIN-PROTOCOL.md\n- Max 150 words per draft\n- No emojis unless requested\n- No responses sent without approval",
+        "model": "zai/glm-4.7",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772269200000,
+        "lastRunAtMs": 1772182803673,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 153763,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
       }
     }
   ]
